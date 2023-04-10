@@ -1,7 +1,12 @@
 import discord
 
+import json
+with open('token.json','r') as f:
+    key = json.load(f)
+
+
 intents = discord.Intents.all()
-# intents.members = True
+
 
 client = discord.Client(intents=intents)
 
@@ -17,4 +22,5 @@ async def on_message(message):
     if message.content.startswith('!hello'):
         await message.channel.send('Hello!')
 
-client.run('MTA5NTAwOTQyMTQ2NzMzMjYzOA.GSwAF0.Vo42QN0MEbSDhPNlymO-E_irvDRnjmFp2ZQR5U')
+client.run(key["discord"])
+
