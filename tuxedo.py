@@ -3,6 +3,8 @@ import discord
 from discord.ext import commands
 import openai
 import random
+import datetime 
+import asyncio
 
 import json
 with open('token.json','r') as f:
@@ -28,6 +30,12 @@ async def on_member_join(member):
 async def on_member_remove(member):
     print(f'{member} has left the server.')
 
+#hello function
+@bot.command()
+async def hello(ctx):
+    author = ctx.author.name
+    await ctx.send(f"Hello {author}!")
+
 #checks latency of your bot
 @bot.command()
 async def ping(ctx):
@@ -35,14 +43,33 @@ async def ping(ctx):
 
 #reminder function
 @bot.command()
-async def reminder(ctx):
-    pass
+async def reminder(ctx,*,reminder_str):                    # * is splat operator (Helps to store the string passes in reminder_str)
+    try:
+        time_str, date_str = reminder_str.split(" ")
+        time = datetime.datetime.strptime(time_str, "%H:%M")
+        date = datetime.datetime.strptime(date_str, "%d/%m/%Y")
+
+        #logic
+        now = datetime.datetime.now()
+        delay = (datetime.datetime.combine(date, time.time()) - now).total_seconds()
+        if(delay<0):
+            await ctx.send("")
+        else:
+            await ctx.send("Reminder Successfull.")
+            await asyncio.sleep(delay)
+            await ctx.send(f"{ctx.author.name}, you have a reminder!")
+    
+    except:
+        await ctx.send('Reminder unsuccessfull - Wrong format.')
 
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
         return 
     if message.content.startswith('.ping'):
+        await bot.process_commands(message)
+        return
+    if message.content.startswith('.hello'):
         await bot.process_commands(message)
         return
     if message.content.startswith('.reminder'):
