@@ -41,6 +41,11 @@ async def hello(ctx):
 async def ping(ctx):
     await ctx.send(f'Ping!? {round(bot.latency * 1000)}ms')
 
+#clears messages in the channel
+@bot.command()
+async def clear(ctx, amount = 5):
+    await ctx.channel.purge(limit=amount)
+
 #reminder function
 @bot.command()
 async def reminder(ctx,*,reminder_str):                    # * is splat operator (Helps to store the string passes in reminder_str)
@@ -70,6 +75,9 @@ async def on_message(message):
         await bot.process_commands(message)
         return
     if message.content.startswith('.hello'):
+        await bot.process_commands(message)
+        return
+    if message.content.startswith('.clear'):
         await bot.process_commands(message)
         return
     if message.content.startswith('.reminder'):
