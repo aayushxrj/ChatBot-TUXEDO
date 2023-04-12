@@ -24,7 +24,7 @@ async def on_message(message):
     
     prepend="You are a llm powering a discord bot. Your job is to respond to user messages in a helpful and brief way. Example conversation: user:Hello! response:hello there! how can i help you?\n"
     prompt = prepend + "user: " + message.content + " response: "
-    print(prompt)
+    # print(prompt)
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,

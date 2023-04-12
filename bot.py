@@ -8,19 +8,19 @@ with open('token.json','r') as f:
 intents = discord.Intents.all()
 
 
-client = discord.Client(intents=intents)
+bot = discord.bot(intents=intents)
 
-@client.event
+@bot.event
 async def on_ready():
-    print('Logged in as {0.user}'.format(client))
+    print('Logged in as {0.user}'.format(bot))
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
 
     if message.content.startswith('!hello'):
         await message.channel.send('Hello!')
 
-client.run(key["discord"])
+bot.run(key["discord"])
 
