@@ -10,6 +10,10 @@ Responds to user messages!
 Can set reminders for you.
 <br>
 <img width="544" alt="bot_reminder" src="https://user-images.githubusercontent.com/111623667/231478488-c4381178-8bad-48d7-bad4-d9c39a79c2e2.png">
+<br>
+Can purge messages in the server [ .clear <number-of-messages> ]
+<br>
+Can tell the latency of the bot [ .ping ]
 <br><br>
 Functionalties to be added : <br>
 Will implement a function so that the bot can retain the memory of last 5 prompts and responses <br>
