@@ -58,11 +58,11 @@ async def reminder(ctx,*,reminder_str):                    # * is splat operator
         now = datetime.datetime.now()
         delay = (datetime.datetime.combine(date, time.time()) - now).total_seconds()
         if(delay<0):
-            await ctx.send("")
+            await ctx.send("Can't set a reminder for past ;)")
         else:
             await ctx.send("Reminder Successfull.")
             await asyncio.sleep(delay)
-            await ctx.send(f"{ctx.author.name}, you have a reminder!")
+            await ctx.send(f"{ctx.author.mention}, you have a reminder!")
     
     except:
         await ctx.send('Reminder unsuccessfull - Wrong format.')
