@@ -1,4 +1,3 @@
-
 import discord
 from discord.ext import commands
 import openai
@@ -86,7 +85,7 @@ async def on_message(message):
     if not message.content.startswith(bot.command_prefix):
         return
     
-    advance_prompt="You are a llm powering a discord bot. Your job is to respond to user messages in a helpful and brief way. Example conversation: user:Hello! response:hello there! how can i help you?\n"
+    advance_prompt="You are a llm powering a discord bot. Your job is to respond to user messages in a helpful and brief way."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
     prompt = advance_prompt + "user: " + message.content + "response: "
 
     response = openai.Completion.create(
@@ -96,9 +95,6 @@ async def on_message(message):
     )
     responses_list = [choice.text.strip() for choice in response.choices if choice.text.strip()]
     await message.channel.send(random.choice(responses_list))
-
-
-
 
 
 bot.run(key["discord"])
