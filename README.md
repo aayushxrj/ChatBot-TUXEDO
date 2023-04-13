@@ -15,6 +15,7 @@ Can purge messages in the server [ .clear number-of-messages ]
 <br>
 Can tell the latency of the bot [ .ping ]
 <br><br><br>
-Functionalties to be added : <br>
-Will implement a function so that the bot can retain the memory of last 5 prompts and responses <br>
-The bot can modify and delete the reminders too.
+Features that can be added : <br>
+1.Hosting the bot 24/7<br>
+2.A function so that the bot can retain the memory of last 5 prompts and responses <br>
+3.A function so that the bot can modify and delete the reminders too.<br>
