@@ -4,6 +4,8 @@ import openai
 import random
 import datetime 
 import asyncio
+from queue import Queue
+
 
 import json
 with open('token.json','r') as f:
@@ -15,6 +17,7 @@ bot = commands.Bot(command_prefix='.', intents=intents)
 
 openai.api_key = key["openai"]
 
+last_5 = Queue(maxsize=5)
 
 
 @bot.event
@@ -66,6 +69,19 @@ async def reminder(ctx,*,reminder_str):                    # * is splat operator
     except:
         await ctx.send('Reminder unsuccessfull - Wrong format.')
 
+#printing out the last 5 messages and responses
+@bot.command()
+async def recent(ctx):
+    new_queue = Queue(maxsize=5)
+    output = "These are the last 5 ai messages:\n"
+    while not last_5.empty:
+        current_tuple = last_5.get()
+        output += f"{current_tuple[0]} -> {current_tuple[1]}\n"
+        new_queue.put(current_tuple)
+    last_5 = new_queue
+    await ctx.send(output)
+
+
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -94,7 +110,14 @@ async def on_message(message):
         max_tokens=50
     )
     responses_list = [choice.text.strip() for choice in response.choices if choice.text.strip()]
-    await message.channel.send(random.choice(responses_list))
+    selected_response = random.choice(responses_list)
+    
+    #storing message and response
+    if last_5.full:
+        last_5.get()
+    last_5.put((message, selected_response))
+    
+    await message.channel.send(selected_response)
 
 
 bot.run(key["discord"])
