@@ -19,3 +19,6 @@ Features that can be added : <br>
 1.Hosting the bot 24/7<br>
 2.A function so that the bot can retain the memory of last 5 prompts and responses <br>
 3.A function so that the bot can modify and delete the reminders too.<br>
+
+
+Adding to test
