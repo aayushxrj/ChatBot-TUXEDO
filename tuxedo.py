@@ -19,6 +19,16 @@ openai.api_key = key["openai"]
 response_memory = []
 prompt_memory = []
 memory = []
+recall_length = 0
+
+response_num = 0
+    
+def get_previous_prompt(recall_length):
+    if len(memory) > 0 and len(memory) >= recall_length:
+        previous = memory[-recall_length]["prompt"]
+        return(previous)
+    else:
+        return "too long ago for me to remember"
 
 @bot.event
 async def on_ready():
@@ -48,6 +58,18 @@ async def ping(ctx):
 async def clear(ctx, amount = 5):
     await ctx.channel.purge(limit=amount)
 
+#recalling last prompt
+@bot.command()
+async def remember_prompt(ctx, *, recall_length):
+    recall_length = int(recall_length[::-1])
+    await ctx.send(f"That prompt was:  {get_previous_prompt(recall_length)}")
+
+
+@bot.command()
+async def remember_response(ctx, *, recall_length):
+    recall_length = int(recall_length[::-1])
+    await ctx.send(f"That answer was:  {get_previous_prompt(recall_length)}")
+
 #reminder function
 @bot.command()
 async def reminder(ctx,*,reminder_str):                    # * is splat operator (Helps to store the string passes in reminder_str)
@@ -69,13 +91,6 @@ async def reminder(ctx,*,reminder_str):                    # * is splat operator
     except:
         await ctx.send('Reminder unsuccessfull - Wrong format.')
 
-
-@bot.command()
-async def memory_recall(ctx, recall_length):
-    
-    await ctx.send(f'Poong!? {round(bot.latency * 1000)}ms')
-#first repeat question
-#then determine if repeat question or ansewer
     
 @bot.event
 async def on_message(message):
@@ -93,11 +108,17 @@ async def on_message(message):
     if message.content.startswith('.reminder'):
         await bot.process_commands(message)
         return
+    if message.content.startswith('.remember'):
+        await bot.process_commands(message)
+        #recall_length = int(message.content[-1:])
+        return
     if not message.content.startswith(bot.command_prefix):
         print('test')
     
-    advance_prompt="You are an evil overlord commanding your minions. Your job is to create chaos and have fun."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
-    prompt = advance_prompt + "user: " + message.content + "response: "
+    #advance_prompt="You are an evil overlord commanding your minions. Your job is to create chaos and have fun."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
+    #prompt = advance_prompt + "user: " + message.content + "response: "
+    prompt =  "user: " + message.content + "response: "
+
 
     response = openai.Completion.create(
         engine="text-davinci-003",
@@ -109,7 +130,7 @@ async def on_message(message):
     #saving response to current_response variable
     current_response = random.choice(responses_list)
     current_prompt = message.content
-    memory_size = 2
+    memory_size = 5
 
 
     #add current_response to memory[]
@@ -125,19 +146,12 @@ async def on_message(message):
         memory.pop(0)
     memory.append({"prompt": current_prompt, "response": current_response})
 
-    print(memory)
-    response_num = 0
-    def get_previous_prompt():
-        previous = memory[-1]["response"]
-        print(previous)
+    
 
-    get_previous_prompt()
-
-    print(memory)
-    print(memory[0])
-    print(memory[0]["prompt"])
-    print(memory[0]["response"])
+    
+    
+   
     await message.channel.send(current_response)
 
-
+print(get_previous_prompt(recall_length))
 bot.run(key["discord"])
