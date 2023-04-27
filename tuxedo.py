@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import openai
+
 import random
 import datetime 
 import asyncio
@@ -15,7 +16,9 @@ bot = commands.Bot(command_prefix='.', intents=intents)
 
 openai.api_key = key["openai"]
 
-
+response_memory = []
+prompt_memory = []
+memory = []
 
 @bot.event
 async def on_ready():
@@ -38,7 +41,7 @@ async def hello(ctx):
 #checks latency of your bot
 @bot.command()
 async def ping(ctx):
-    await ctx.send(f'Ping!? {round(bot.latency * 1000)}ms')
+    await ctx.send(f'Poong!? {round(bot.latency * 1000)}ms')
 
 #clears messages in the channel
 @bot.command()
@@ -66,6 +69,14 @@ async def reminder(ctx,*,reminder_str):                    # * is splat operator
     except:
         await ctx.send('Reminder unsuccessfull - Wrong format.')
 
+
+@bot.command()
+async def memory_recall(ctx, recall_length):
+    
+    await ctx.send(f'Poong!? {round(bot.latency * 1000)}ms')
+#first repeat question
+#then determine if repeat question or ansewer
+    
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -83,9 +94,9 @@ async def on_message(message):
         await bot.process_commands(message)
         return
     if not message.content.startswith(bot.command_prefix):
-        return
+        print('test')
     
-    advance_prompt="You are a llm powering a discord bot. Your job is to respond to user messages in a helpful and brief way."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
+    advance_prompt="You are an evil overlord commanding your minions. Your job is to create chaos and have fun."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
     prompt = advance_prompt + "user: " + message.content + "response: "
 
     response = openai.Completion.create(
@@ -94,7 +105,39 @@ async def on_message(message):
         max_tokens=50
     )
     responses_list = [choice.text.strip() for choice in response.choices if choice.text.strip()]
-    await message.channel.send(random.choice(responses_list))
+
+    #saving response to current_response variable
+    current_response = random.choice(responses_list)
+    current_prompt = message.content
+    memory_size = 2
+
+
+    #add current_response to memory[]
+    if len(response_memory) >= memory_size: 
+        response_memory.pop(0)
+    response_memory.append(current_response)
+    
+    if len(prompt_memory) >= memory_size: 
+        prompt_memory.pop(0)
+    prompt_memory.append(current_prompt)
+
+    if len(memory) >= memory_size: 
+        memory.pop(0)
+    memory.append({"prompt": current_prompt, "response": current_response})
+
+    print(memory)
+    response_num = 0
+    def get_previous_prompt():
+        previous = memory[-1]["response"]
+        print(previous)
+
+    get_previous_prompt()
+
+    print(memory)
+    print(memory[0])
+    print(memory[0]["prompt"])
+    print(memory[0]["response"])
+    await message.channel.send(current_response)
 
 
 bot.run(key["discord"])
