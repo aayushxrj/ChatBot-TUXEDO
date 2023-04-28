@@ -76,7 +76,7 @@ async def clear(ctx, amount = 5):
 @bot.command()
 #to remember a prompt the user types .remember_prompt followed by a number, defining how long ago the prompt was made
 async def remember_prompt(ctx, *, recall_length):
-    #this accesses the last symbol in the user prompt, which should be the number they gave, for example '.remember_prompt. 3' will return '3'
+    #this accesses the last symbol in the user prompt, which should be the number they gave, for example '.remember_prompt. 3' will return '3' which will in turn return the 3rd last prompt
     recall_length = int(recall_length[::-1])
     #the prompt recall function is then called, passing the recall_length so the correct prompt is recalled
     await ctx.send(f"That prompt was:  {get_previous_prompt(recall_length)}")
