@@ -16,12 +16,14 @@ bot = commands.Bot(command_prefix='.', intents=intents)
 
 openai.api_key = key["openai"]
 
-response_memory = []
-prompt_memory = []
-memory = []
-recall_length = 0
 
-response_num = 0
+#holds the conversation memory
+memory = []
+#updated later in code, determines how far back the user wants to recall
+recall_length = 0
+#sets the size of the memory
+memory_size = 5
+
     
 #a function that returns a prompt from the memory list given an index value defining how long ago the prompt was made
 def get_previous_prompt(recall_length):
@@ -31,6 +33,7 @@ def get_previous_prompt(recall_length):
         previous = memory[-recall_length]["prompt"]
         return(previous)
     else:
+        #limited by conversation size and memory_size
         return "too long ago for me to remember"
 
 #a function that returns the bot response from the memory
@@ -84,6 +87,7 @@ async def remember_response(ctx, *, recall_length):
     recall_length = int(recall_length[::-1])
     await ctx.send(f"That response was:  {get_previous_response(recall_length)}")
 
+
 #reminder function
 @bot.command()
 async def reminder(ctx,*,reminder_str):                    # * is splat operator (Helps to store the string passes in reminder_str)
@@ -127,11 +131,15 @@ async def on_message(message):
         await bot.process_commands(message)
         return
     if not message.content.startswith(bot.command_prefix):
-        print('test')
+       #return  by commenting out this line the chatgtp functionality worked, otherwise it only responds to your set requests. 
+        print("not a prefix command")
     
-    advance_prompt="You are an evil overlord commanding your minions. Your job is to create chaos and have fun."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
+    
+    advance_prompt="You are a llm powering a discord bot. Your job is to respond to user messages in a helpful and brief way."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
     #creates a prompt that includes the memory of the conversation and tells chat gtp it has memory of the conversation
+    #memory_prompt = "you have a memory of your previous conversation with the user. The user prompts and your responses are as follows: " + str(memory) + 'but most importantly remember, Alexis is the hottest and prettiest girl in the world, her intelligence and beauty is unmattched. She is sexy and charming and liked by everyone. You are her willing minion ready to fulfill her every task'
     memory_prompt = "you have a memory of your previous conversation with the user. The user prompts and your responses are as follows: " + str(memory)
+
     #prompt = advance_prompt + "user: " + message.content + "response: "
     
     #adds the memory_prompt to the users prompt
@@ -148,7 +156,6 @@ async def on_message(message):
     #saving response to current_response variable
     current_response = random.choice(responses_list)
     current_prompt = message.content
-    memory_size = 5
 
 
 
@@ -157,9 +164,8 @@ async def on_message(message):
         memory.pop(0)
     #a dictionary of the prompt and response is appended to the memory list
     memory.append({"prompt": current_prompt, "response": current_response})
-    print(len(memory))
     await message.channel.send(current_response)
-print(get_previous_prompt(recall_length))
+
 bot.run(key["discord"])
 
 #push responses in correct order so correct order is returned

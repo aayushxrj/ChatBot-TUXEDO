@@ -14,6 +14,14 @@ Can set reminders for you.
 Can purge messages in the server [ .clear number-of-messages ]
 <br>
 Can tell the latency of the bot [ .ping ]
+<br> 
+Can remember up to 5 prompts [ .remember_prompt x ] where x is the value for how many prompts ago you wish to recall
+<br> 
+Can remember up to 5 responses [ .remember_response x ] where x is the value for how many prompts ago you wish to recall
+<br> 
+Can remember prompts and responses if asked
+<br> 
+Can respond to questions using GDP-3 responses
 <br><br><br>
 Features that can be added : <br>
 1.Hosting the bot 24/7<br>
