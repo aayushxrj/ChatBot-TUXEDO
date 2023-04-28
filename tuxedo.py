@@ -23,9 +23,20 @@ recall_length = 0
 
 response_num = 0
     
+#a function that returns a prompt from the memory list given an index value defining how long ago the prompt was made
 def get_previous_prompt(recall_length):
+    #ensures the conversation has begun and the memory length isn't greater than the memory size
     if len(memory) > 0 and len(memory) >= recall_length:
+        #indexes the prompt from the memory list
         previous = memory[-recall_length]["prompt"]
+        return(previous)
+    else:
+        return "too long ago for me to remember"
+
+#a function that returns the bot response from the memory
+def get_previous_response(recall_length):
+    if len(memory) > 0 and len(memory) >= recall_length:
+        previous = memory[-recall_length]["response"]
         return(previous)
     else:
         return "too long ago for me to remember"
@@ -58,17 +69,20 @@ async def ping(ctx):
 async def clear(ctx, amount = 5):
     await ctx.channel.purge(limit=amount)
 
-#recalling last prompt
+#recalls a prompt
 @bot.command()
+#to remember a prompt the user types .remember_prompt followed by a number, defining how long ago the prompt was made
 async def remember_prompt(ctx, *, recall_length):
+    #this accesses the last symbol in the user prompt, which should be the number they gave, for example '.remember_prompt. 3' will return '3'
     recall_length = int(recall_length[::-1])
+    #the prompt recall function is then called, passing the recall_length so the correct prompt is recalled
     await ctx.send(f"That prompt was:  {get_previous_prompt(recall_length)}")
 
-
+#recalls a response, same functionality as remember_prompt
 @bot.command()
 async def remember_response(ctx, *, recall_length):
     recall_length = int(recall_length[::-1])
-    await ctx.send(f"That answer was:  {get_previous_prompt(recall_length)}")
+    await ctx.send(f"That response was:  {get_previous_response(recall_length)}")
 
 #reminder function
 @bot.command()
@@ -108,16 +122,20 @@ async def on_message(message):
     if message.content.startswith('.reminder'):
         await bot.process_commands(message)
         return
+    #listens for the user prompts for rememembering prompts/responses
     if message.content.startswith('.remember'):
         await bot.process_commands(message)
-        #recall_length = int(message.content[-1:])
         return
     if not message.content.startswith(bot.command_prefix):
         print('test')
     
-    #advance_prompt="You are an evil overlord commanding your minions. Your job is to create chaos and have fun."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
+    advance_prompt="You are an evil overlord commanding your minions. Your job is to create chaos and have fun."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
+    #creates a prompt that includes the memory of the conversation and tells chat gtp it has memory of the conversation
+    memory_prompt = "you have a memory of your previous conversation with the user. The user prompts and your responses are as follows: " + str(memory)
     #prompt = advance_prompt + "user: " + message.content + "response: "
-    prompt =  "user: " + message.content + "response: "
+    
+    #adds the memory_prompt to the users prompt
+    prompt =  memory_prompt + "user: " + message.content + "response: "
 
 
     response = openai.Completion.create(
@@ -133,25 +151,15 @@ async def on_message(message):
     memory_size = 5
 
 
-    #add current_response to memory[]
-    if len(response_memory) >= memory_size: 
-        response_memory.pop(0)
-    response_memory.append(current_response)
-    
-    if len(prompt_memory) >= memory_size: 
-        prompt_memory.pop(0)
-    prompt_memory.append(current_prompt)
-
+    #if memory is larger than the memory_size(usually 5), the last prompt/response in the memory is removed before the new prompt/response is added. 
     if len(memory) >= memory_size: 
         memory.pop(0)
+    #a dictionary of the prompt and response is appended to the memory list
     memory.append({"prompt": current_prompt, "response": current_response})
 
-    
-
-    
-    
-   
     await message.channel.send(current_response)
 
 print(get_previous_prompt(recall_length))
 bot.run(key["discord"])
+
+#push responses in correct order so correct order is returned
