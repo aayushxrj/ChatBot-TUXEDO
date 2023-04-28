@@ -19,9 +19,11 @@ Can remember up to 5 prompts [ .remember_prompt x ] where x is the value for how
 <br> 
 Can remember up to 5 responses [ .remember_response x ] where x is the value for how many prompts ago you wish to recall
 <br> 
-<img width="1127" alt="Screenshot 2023-04-27 at 17 45 36" src="https://user-images.githubusercontent.com/68620658/235252860-2111ac30-fe54-4304-ae2e-80327b5ded5c.png">
-
-Can remember prompts and responses if asked
+<img width="679" alt="Screenshot 2023-04-28 at 21 59 40" src="https://user-images.githubusercontent.com/68620658/235253533-547de4f8-f23f-436b-b6d1-d5421f416d8e.png">
+<br> 
+Can remember up to 5 prompts and responses if asked
+<br> 
+<img width="818" alt="Screenshot 2023-04-28 at 22 00 51" src="https://user-images.githubusercontent.com/68620658/235253580-0f390458-6571-43fd-ad29-de154034df04.png">
 <br> 
 Can respond to questions using GDP-3 responses
 <br><br><br>
