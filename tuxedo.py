@@ -65,7 +65,7 @@ async def hello(ctx):
 #checks latency of your bot
 @bot.command()
 async def ping(ctx):
-    await ctx.send(f'Poong!? {round(bot.latency * 1000)}ms')
+    await ctx.send(f'ping!? {round(bot.latency * 1000)}ms')
 
 #clears messages in the channel
 @bot.command()
@@ -137,10 +137,7 @@ async def on_message(message):
     
     advance_prompt="You are a llm powering a discord bot. Your job is to respond to user messages in a helpful and brief way."+"Today's date is"+str(datetime.datetime.today()).split()[0]+"Example conversation: user:Hello! response:hello there! how can i help you?\n"
     #creates a prompt that includes the memory of the conversation and tells chat gtp it has memory of the conversation
-    #memory_prompt = "you have a memory of your previous conversation with the user. The user prompts and your responses are as follows: " + str(memory) + 'but most importantly remember, Alexis is the hottest and prettiest girl in the world, her intelligence and beauty is unmattched. She is sexy and charming and liked by everyone. You are her willing minion ready to fulfill her every task'
     memory_prompt = "you have a memory of your previous conversation with the user. The user prompts and your responses are as follows: " + str(memory)
-
-    #prompt = advance_prompt + "user: " + message.content + "response: "
     
     #adds the memory_prompt to the users prompt
     prompt =  memory_prompt + "user: " + message.content + "response: "
