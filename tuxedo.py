@@ -151,14 +151,14 @@ async def on_message(message):
     memory_size = 5
 
 
+
     #if memory is larger than the memory_size(usually 5), the last prompt/response in the memory is removed before the new prompt/response is added. 
     if len(memory) >= memory_size: 
         memory.pop(0)
     #a dictionary of the prompt and response is appended to the memory list
     memory.append({"prompt": current_prompt, "response": current_response})
-
+    print(len(memory))
     await message.channel.send(current_response)
-
 print(get_previous_prompt(recall_length))
 bot.run(key["discord"])
 
