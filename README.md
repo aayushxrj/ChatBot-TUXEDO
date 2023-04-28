@@ -14,8 +14,22 @@ Can set reminders for you.
 Can purge messages in the server [ .clear number-of-messages ]
 <br>
 Can tell the latency of the bot [ .ping ]
+<br> <br>
+Can remember up to 5 prompts [ .remember_prompt x ] where x is the value for how many prompts ago you wish to recall
+<br> 
+Can remember up to 5 responses [ .remember_response x ] where x is the value for how many prompts ago you wish to recall
+<br> 
+<img width="679" alt="Screenshot 2023-04-28 at 21 59 40" src="https://user-images.githubusercontent.com/68620658/235253533-547de4f8-f23f-436b-b6d1-d5421f416d8e.png">
+<br> 
+Can remember up to 5 prompts and responses if asked
+<br> 
+<img width="818" alt="Screenshot 2023-04-28 at 22 00 51" src="https://user-images.githubusercontent.com/68620658/235253580-0f390458-6571-43fd-ad29-de154034df04.png">
+<br> 
+Can respond to questions using GDP-3 responses
 <br><br><br>
 Features that can be added : <br>
 1.Hosting the bot 24/7<br>
-2.A function so that the bot can retain the memory of last 5 prompts and responses <br>
-3.A function so that the bot can modify and delete the reminders too.<br>
+2.A function so that the bot can modify and delete the reminders too.<br>
+
+
+Adding to test
