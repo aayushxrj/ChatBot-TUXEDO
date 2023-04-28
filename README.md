@@ -14,11 +14,13 @@ Can set reminders for you.
 Can purge messages in the server [ .clear number-of-messages ]
 <br>
 Can tell the latency of the bot [ .ping ]
-<br> 
+<br> <br>
 Can remember up to 5 prompts [ .remember_prompt x ] where x is the value for how many prompts ago you wish to recall
 <br> 
 Can remember up to 5 responses [ .remember_response x ] where x is the value for how many prompts ago you wish to recall
 <br> 
+<img width="1127" alt="Screenshot 2023-04-27 at 17 45 36" src="https://user-images.githubusercontent.com/68620658/235252860-2111ac30-fe54-4304-ae2e-80327b5ded5c.png">
+
 Can remember prompts and responses if asked
 <br> 
 Can respond to questions using GDP-3 responses
